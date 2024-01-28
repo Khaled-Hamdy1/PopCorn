@@ -18,7 +18,8 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { movies, isLoading, error } = useGetMovies(query);
 
-  function handleSelectMovie(id: string) {
+  function handleSelectMovie(id?: string) {
+    if (!id) return;
     setSelectedId((selectedId) => (id === selectedId ? null : id));
   }
 

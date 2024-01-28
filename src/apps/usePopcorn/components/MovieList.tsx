@@ -3,7 +3,7 @@ import Movie from "./Movie";
 
 type TMoviesList = {
   movies: TMovie[];
-  onSelectMovie: (id: string) => void;
+  onSelectMovie: (id?: string) => void;
 };
 
 export default function MovieList({ movies, onSelectMovie }: TMoviesList) {

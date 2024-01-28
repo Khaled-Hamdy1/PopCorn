@@ -4,9 +4,9 @@ const average = (arr: number[]) =>
   arr.reduce((acc, cur, _i, arr) => acc + cur / arr.length, 0);
 
 export default function WatchedSummary({ watched }: { watched: TMovie[] }) {
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime));
+  const avgImdbRating = average(watched.map((movie) => +(movie.runtime || 0)));
+  const avgUserRating = average(watched.map((movie) => +(movie.runtime || 0)));
+  const avgRuntime = average(watched.map((movie) => +(movie.runtime || 0)));
 
   return (
     <div className="summary">

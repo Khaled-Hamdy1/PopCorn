@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TMovie } from "../types";
+import { TWatchedMovie } from "../types";
 import Loader from "./Loader";
 import StarRating from "./StarRating";
 import useGetMovieDetails from "../hooks/useGetMovieDetails";
@@ -7,8 +7,8 @@ import useGetMovieDetails from "../hooks/useGetMovieDetails";
 type TMovieDetailsProps = {
   selectedId: string;
   onCloseMovie: () => void;
-  onAddWatched: (movie: TMovie) => void;
-  watched: TMovie[];
+  onAddWatched: (movie: TWatchedMovie) => void;
+  watched: TWatchedMovie[];
 };
 
 export default function MovieDetails({
@@ -26,14 +26,14 @@ export default function MovieDetails({
 
   function handleAdd() {
 
-    const newWatchedMovie: TMovie = {
+    const newWatchedMovie: TWatchedMovie = {
       imdbID: selectedId,
-      title: movie?.title,
-      year: movie?.year,
-      poster: movie?.poster,
+      title: movie?.Title,
+      year: movie?.Year,
+      poster: movie?.Poster,
       imdbRating: Number(movie?.imdbRating),
-      runtime: Number(movie?.runtime.split(" ")[0]),
-      userRating,
+      runtime: Number(movie?.Runtime.split(" ")[0]),
+      userRating : userRating,
     };
     onAddWatched(newWatchedMovie);
     onCloseMovie();
@@ -55,17 +55,16 @@ export default function MovieDetails({
 
   useEffect(
     function () {
-      if (!movie?.title) return;
-      document.title = `Movie | ${movie?.title}`;
+      if (!movie?.Title) return;
+      document.title = `Movie | ${movie?.Title}`;
 
       return function () {
         document.title = "usePopcorn";
         // console.log(`Clean up effect for movie ${title}`);
       };
     },
-    [movie?.title]
+    [movie?.Title]
   );
-
   return (
     <div className="details">
       {isLoading ? (
@@ -76,13 +75,13 @@ export default function MovieDetails({
             <button className="btn-back" onClick={onCloseMovie}>
               &larr;
             </button>
-            <img src={movie?.poster} alt={`Poster of ${movie} movie`} />
+            <img src={movie?.Poster} alt={`Poster of ${movie} movie`} />
             <div className="details-overview">
-              <h2>{movie?.title}</h2>
+              <h2>{movie?.Title}</h2>
               <p>
-                {movie?.released} &bull; {movie?.runtime}
+                {movie?.Released} &bull; {movie?.Runtime}
               </p>
-              <p>{movie?.genre}</p>
+              <p>{movie?.Genre}</p>
               <p>
                 <span>⭐️</span>
                 {movie?.imdbRating} IMDb rating
@@ -107,14 +106,15 @@ export default function MovieDetails({
               ) : (
                 <p>
                   You rated with movie {watchedUserRating} <span>⭐️</span>
+                  {/* You rated with movie 5 <span>⭐️</span> */}
                 </p>
               )}
             </div>
             <p>
-              <em>{movie?.plot}</em>
+              <em>{movie?.Plot}</em>
             </p>
-            <p>Starring {movie?.actors}</p>
-            <p>Directed by {movie?.director}</p>
+            <p>Starring {movie?.Actors}</p>
+            <p>Directed by {movie?.Director}</p>
           </section>
         </>
       )}

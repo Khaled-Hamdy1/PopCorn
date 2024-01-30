@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../index.css";
-import { TMovie } from "../types";
+import { TWatchedMovie } from "../types";
 import Search from "./Search";
 import Loader from "./Loader";
 import ErrorMessage from "./ErrorMessage";
@@ -14,7 +14,7 @@ import useGetMovies from "../hooks/useGetMovies";
 
 export default function App() {
   const [query, setQuery] = useState<string>("");
-  const [watched, setWatched] = useState<TMovie[]>([]);
+  const [watched, setWatched] = useState<TWatchedMovie[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { movies, isLoading, error } = useGetMovies(query);
 
@@ -27,14 +27,13 @@ export default function App() {
     setSelectedId(null);
   }
 
-  function handleAddWatched(movie: TMovie) {
+  function handleAddWatched(movie: TWatchedMovie) {
     setWatched((watched) => [...watched, movie]);
   }
 
   function handleDeleteWatched(id?: string) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
-
   return (
     <>
       <nav className="nav-bar">

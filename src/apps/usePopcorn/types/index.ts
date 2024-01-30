@@ -1,44 +1,3 @@
-export type TMovie = {
-  imdbID?: string;
-  title?: string;
-  year?: string;
-  poster?: string;
-  runtime?: number;
-  imdbRating?: number;
-  userRating?: number;
-};
-
-export type TMovieDetails = {
-  title: string;
-  year: string;
-  rated: string;
-  released: string;
-  runtime: string;
-  genre: string;
-  director: string;
-  writer: string;
-  actors: string;
-  plot: string;
-  language: string;
-  country: string;
-  awards: string;
-  poster: string;
-  ratings: {
-    source: string;
-    value: string;
-  }[];
-  metascore: string;
-  imdbRating: string;
-  imdbVotes: string;
-  imdbID: string;
-  type: string;
-  DVD: string;
-  boxOffice: string;
-  production: string;
-  website: string;
-  response: string;
-};
-
 export type TMovieDetailsAPI = {
   Title: string;
   Year: string;
@@ -54,10 +13,7 @@ export type TMovieDetailsAPI = {
   Country: string;
   Awards: string;
   Poster: string;
-  Ratings: {
-    Source: string;
-    Value: string;
-  }[];
+  Ratings: { Source: string; Value: string }[];
   Metascore: string;
   imdbRating: string;
   imdbVotes: string;
@@ -68,4 +24,28 @@ export type TMovieDetailsAPI = {
   Production: string;
   Website: string;
   Response: string;
+};
+
+export type TMovieAPI = {
+  Title: string;
+  Year: string;
+  imdbID: string;
+  Type: string;
+  Poster: string;
+};
+export type TMovie = {
+  title: string;
+  year: string;
+  imdbID: string;
+  poster: string;
+};
+
+export type TWatchedMovie = {
+  imdbID: string;
+  title?: string;
+  year?: string;
+  poster?: string;
+  imdbRating: number;
+  runtime: number;
+  userRating: number;
 };

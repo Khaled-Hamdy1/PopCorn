@@ -1,9 +1,9 @@
-import { TMovie } from "../types";
+import { TWatchedMovie } from "../types";
 
 const average = (arr: number[]) =>
   arr.reduce((acc, cur, _i, arr) => acc + cur / arr.length, 0);
 
-export default function WatchedSummary({ watched }: { watched: TMovie[] }) {
+export default function WatchedSummary({ watched }: { watched: TWatchedMovie[] }) {
   const avgImdbRating = average(watched.map((movie) => +(movie.runtime || 0)));
   const avgUserRating = average(watched.map((movie) => +(movie.runtime || 0)));
   const avgRuntime = average(watched.map((movie) => +(movie.runtime || 0)));

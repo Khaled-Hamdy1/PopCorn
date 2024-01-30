@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TMovie } from "../types";
+import { TMovie, TMovieAPI } from "../types";
 
 export default function useGetMovies(query: string) {
   const [movies, setMovies] = useState<TMovie[]>([]);
@@ -15,16 +15,24 @@ export default function useGetMovies(query: string) {
         setError("");
 
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=97b77be1&s=${query}`,
+          `https://www.omdbapi.com/?apikey=97b77be1&s=${query}`,
           { signal: controller.signal }
         );
 
         if (!res.ok)
           throw new Error("Something went wrong with fetching movies");
-
         const data = await res.json();
         if (data.Response === "False") throw new Error("Movie not found");
-        setMovies(data.Search);
+        const Result: TMovie[] = [];
+        data.Search.forEach((item: TMovieAPI) => {
+          Result.push({
+            title: item.Title,
+            year: item.Year,
+            imdbID: item.imdbID,
+            poster: item.Poster,
+          });
+        });
+        setMovies(Result);
         setError("");
       } catch (error) {
         const err = error as Error;
@@ -36,7 +44,9 @@ export default function useGetMovies(query: string) {
         setIsLoading(false);
       }
     })();
+
     return () => controller.abort();
   }, [query]);
+
   return { movies, isLoading, error };
 }

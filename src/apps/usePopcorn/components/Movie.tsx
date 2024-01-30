@@ -1,4 +1,4 @@
-import { TMovie } from "../types";
+import {  TMovie } from "../types";
 
 type TMovieProps = {
   movie: TMovie;

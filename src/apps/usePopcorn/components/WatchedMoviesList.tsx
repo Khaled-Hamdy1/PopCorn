@@ -1,11 +1,11 @@
-import { TMovie } from "../types";
+import { TWatchedMovie } from "../types";
 import WatchedMovie from "./WatchedMovie";
 
 export default function WatchedMoviesList({
   watched,
   onDeleteWatched,
 }: {
-  watched: TMovie[];
+  watched: TWatchedMovie[];
   onDeleteWatched: (id?: string) => void;
 }) {
   return (

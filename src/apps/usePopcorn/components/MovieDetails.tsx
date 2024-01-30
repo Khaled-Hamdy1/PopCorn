@@ -71,7 +71,7 @@ export default function MovieDetails({
           <button className="btn-back" onClick={onCloseMovie}>
             &larr;
           </button>
-          <img src={movie?.poster} alt={`Poster of ${movie} movie`} />
+          <img src={movie?.poster} alt={`Poster of ${movie} movie`} loading="lazy" />
           <div className="details-overview">
             <h2>{movie?.title}</h2>
             <p>

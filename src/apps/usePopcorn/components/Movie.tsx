@@ -8,7 +8,7 @@ type TMovieProps = {
 export default function Movie({ movie, onSelectMovie }: TMovieProps) {
   return (
     <li onClick={() => onSelectMovie(movie.imdbID)}>
-      <img src={movie.poster} alt={`${movie.title} poster`} />
+      <img src={movie.poster} alt={`${movie.title} poster`} loading="lazy" />
       <h3>{movie.title}</h3>
       <div>
         <p>

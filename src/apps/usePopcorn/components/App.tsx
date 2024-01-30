@@ -15,7 +15,7 @@ import Logo from "./Logo";
 
 export default function App() {
   const [query, setQuery] = useState<string>("");
-  const [watched, setWatched] = useState<TWatchedMovie[]>(()=> {
+  const [watched, setWatched] = useState<TWatchedMovie[]>(() => {
     const watched = localStorage.getItem("watched");
     return watched ? JSON.parse(watched) : [];
   });
@@ -32,15 +32,28 @@ export default function App() {
   }
 
   function handleAddWatched(movie: TWatchedMovie) {
-    const newWatchedMovie: TWatchedMovie[] = [...watched, movie]
+    const newWatchedMovie: TWatchedMovie[] = [...watched, movie];
     setWatched(newWatchedMovie);
     localStorage.setItem("watched", JSON.stringify(newWatchedMovie));
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        new Notification("Movie added to watched list", {
+          body: `${movie?.title} was added to your watched list`,
+        });
+      } else {
+        console.log("No permission for notifications");
+      }
+    });
   }
 
   function handleDeleteWatched(id?: string) {
-    const confirm = window.confirm("Are you sure you want to delete this movie?");
+    const confirm = window.confirm(
+      "Are you sure you want to delete this movie?"
+    );
     if (!confirm || !id) return;
-    const newWatchedMovie: TWatchedMovie[] = watched.filter((movie) => movie.imdbID !== id);
+    const newWatchedMovie: TWatchedMovie[] = watched.filter(
+      (movie) => movie.imdbID !== id
+    );
     setWatched(newWatchedMovie);
     localStorage.setItem("watched", JSON.stringify(newWatchedMovie));
   }

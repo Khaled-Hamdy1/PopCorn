@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TWatchedMovie } from "../types";
 import Loader from "./Loader";
 import StarRating from "./StarRating";
@@ -17,15 +17,15 @@ export default function MovieDetails({
   onAddWatched,
   watched,
 }: TMovieDetailsProps) {
-  const {movie,isLoading} = useGetMovieDetails(selectedId);
+  const { movie, isLoading } = useGetMovieDetails(selectedId);
   const [userRating, setUserRating] = useState<number>(0);
-  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
-  const watchedUserRating = watched.find(
-    (movie) => movie.imdbID === selectedId
-  )?.userRating;
+  const isWatched = useMemo(
+    () => watched.find((movie) => movie.imdbID === selectedId),
+    [watched, selectedId]
+  );
+  const watchedUserRating = isWatched?.userRating;
 
-  function handleAdd() {
-
+  const handleAdd = () => {
     const newWatchedMovie: TWatchedMovie = {
       imdbID: selectedId,
       title: movie?.title,
@@ -33,38 +33,36 @@ export default function MovieDetails({
       poster: movie?.poster,
       imdbRating: Number(movie?.imdbRating),
       runtime: Number(movie?.runtime.split(" ")[0]),
-      userRating : userRating,
+      userRating: userRating,
     };
+
     onAddWatched(newWatchedMovie);
     onCloseMovie();
-  }
+  };
 
   useEffect(() => {
-    const callback = (e: KeyboardEvent): void => {
+    const keyDownEvent = (e: KeyboardEvent): void => {
       if (e.code === "Escape") {
         onCloseMovie();
       }
     };
 
-    document.addEventListener("keydown", callback);
+    document.addEventListener("keydown", keyDownEvent);
 
     return () => {
-      document.removeEventListener("keydown", callback);
+      document.removeEventListener("keydown", keyDownEvent);
     };
   }, [onCloseMovie]);
 
-  useEffect(
-    function () {
-      if (!movie?.title) return;
-      document.title = `Movie | ${movie?.title}`;
+  useEffect(() => {
+    if (!movie?.title) return;
+    document.title = `Movie | ${movie?.title}`;
 
-      return function () {
-        document.title = "usePopcorn";
-        // console.log(`Clean up effect for movie ${title}`);
-      };
-    },
-    [movie?.title]
-  );
+    return () => {
+      document.title = "usePopcorn";
+    };
+  }, [movie?.title]);
+
   return (
     <div className="details">
       {isLoading ? (

@@ -15,7 +15,10 @@ import Logo from "./Logo";
 
 export default function App() {
   const [query, setQuery] = useState<string>("");
-  const [watched, setWatched] = useState<TWatchedMovie[]>([]);
+  const [watched, setWatched] = useState<TWatchedMovie[]>(()=> {
+    const watched = localStorage.getItem("watched");
+    return watched ? JSON.parse(watched) : [];
+  });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { movies, isLoading, error } = useGetMovies(query);
 
@@ -29,11 +32,17 @@ export default function App() {
   }
 
   function handleAddWatched(movie: TWatchedMovie) {
-    setWatched((watched) => [...watched, movie]);
+    const newWatchedMovie: TWatchedMovie[] = [...watched, movie]
+    setWatched(newWatchedMovie);
+    localStorage.setItem("watched", JSON.stringify(newWatchedMovie));
   }
 
   function handleDeleteWatched(id?: string) {
-    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+    const confirm = window.confirm("Are you sure you want to delete this movie?");
+    if (!confirm || !id) return;
+    const newWatchedMovie: TWatchedMovie[] = watched.filter((movie) => movie.imdbID !== id);
+    setWatched(newWatchedMovie);
+    localStorage.setItem("watched", JSON.stringify(newWatchedMovie));
   }
   return (
     <>

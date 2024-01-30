@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { TWatchedMovie } from "../types";
 import Loader from "./Loader";
-import StarRating from "./StarRating";
 import useGetMovieDetails from "../hooks/useGetMovieDetails";
+
+// Lazy load
+const StarRating = lazy(() => import("./StarRating"));
 
 type TMovieDetailsProps = {
   selectedId: string;
@@ -17,13 +19,12 @@ export default function MovieDetails({
   onAddWatched,
   watched,
 }: TMovieDetailsProps) {
-  const { movie, isLoading } = useGetMovieDetails(selectedId);
+  const { movie } = useGetMovieDetails(selectedId);
   const [userRating, setUserRating] = useState<number>(0);
-  const isWatched = useMemo(
+  const watchedUser = useMemo(
     () => watched.find((movie) => movie.imdbID === selectedId),
     [watched, selectedId]
   );
-  const watchedUserRating = isWatched?.userRating;
 
   const handleAdd = () => {
     const newWatchedMovie: TWatchedMovie = {
@@ -64,58 +65,55 @@ export default function MovieDetails({
   }, [movie?.title]);
 
   return (
-    <div className="details">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <header>
-            <button className="btn-back" onClick={onCloseMovie}>
-              &larr;
-            </button>
-            <img src={movie?.poster} alt={`Poster of ${movie} movie`} />
-            <div className="details-overview">
-              <h2>{movie?.title}</h2>
-              <p>
-                {movie?.released} &bull; {movie?.runtime}
-              </p>
-              <p>{movie?.genre}</p>
-              <p>
-                <span>⭐️</span>
-                {movie?.imdbRating} IMDb rating
-              </p>
-            </div>
-          </header>
-          <section>
-            <div className="rating">
-              {!isWatched ? (
-                <>
+    <Suspense fallback={<Loader />}>
+      <div className="details">
+        <header>
+          <button className="btn-back" onClick={onCloseMovie}>
+            &larr;
+          </button>
+          <img src={movie?.poster} alt={`Poster of ${movie} movie`} />
+          <div className="details-overview">
+            <h2>{movie?.title}</h2>
+            <p>
+              {movie?.released} &bull; {movie?.runtime}
+            </p>
+            <p>{movie?.genre}</p>
+            <p>
+              <span>⭐️</span>
+              {movie?.imdbRating} IMDb rating
+            </p>
+          </div>
+        </header>
+        <section>
+          <div className="rating">
+            {!watchedUser ? (
+              <>
+                <Suspense fallback={<Loader />}>
                   <StarRating
                     onSetRating={setUserRating}
                     maxRating={10}
                     size={24}
                   />
-                  {Number(userRating) > 0 && (
-                    <button className="btn-add" onClick={handleAdd}>
-                      + Add to list
-                    </button>
-                  )}
-                </>
-              ) : (
-                <p>
-                  You rated with movie {watchedUserRating} <span>⭐️</span>
-                  {/* You rated with movie 5 <span>⭐️</span> */}
-                </p>
-              )}
-            </div>
-            <p>
-              <em>{movie?.plot}</em>
-            </p>
-            <p>Starring {movie?.actors}</p>
-            <p>Directed by {movie?.director}</p>
-          </section>
-        </>
-      )}
-    </div>
+                </Suspense>
+                {+userRating > 0 && (
+                  <button className="btn-add" onClick={handleAdd}>
+                    + Add to list
+                  </button>
+                )}
+              </>
+            ) : (
+              <p>
+                You rated with movie {watchedUser?.userRating} <span>⭐️</span>
+              </p>
+            )}
+          </div>
+          <p>
+            <em>{movie?.plot}</em>
+          </p>
+          <p>Starring {movie?.actors}</p>
+          <p>Directed by {movie?.director}</p>
+        </section>
+      </div>
+    </Suspense>
   );
 }

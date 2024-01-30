@@ -46,7 +46,10 @@ export default function App() {
       <main className="main">
         <Box>
           {isLoading && <Loader />}
-          {error && <ErrorMessage message={error} />}
+
+          {error && (
+            <ErrorMessage message={query ? error : "search on Movie"} />
+          )}
           {!isLoading && !error && (
             <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
           )}

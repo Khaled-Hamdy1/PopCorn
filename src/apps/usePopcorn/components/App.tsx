@@ -11,6 +11,7 @@ import MovieDetails from "./MovieDetails";
 import WatchedSummary from "./WatchedSummary";
 import WatchedMoviesList from "./WatchedMoviesList";
 import useGetMovies from "../hooks/useGetMovies";
+import Logo from "./Logo";
 
 export default function App() {
   const [query, setQuery] = useState<string>("");
@@ -37,6 +38,7 @@ export default function App() {
   return (
     <>
       <nav className="nav-bar">
+        <Logo />
         <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </nav>
@@ -72,27 +74,3 @@ export default function App() {
     </>
   );
 }
-/*
-function WatchedBox() {
-  const [watched, setWatched] = useState(tempWatchedData);
-  const [isOpen2, setIsOpen2] = useState(true);
-
-  return (
-    <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
-      </button>
-
-      {isOpen2 && (
-        <>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
-        </>
-      )}
-    </div>
-  );
-}
-*/

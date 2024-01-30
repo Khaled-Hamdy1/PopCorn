@@ -28,11 +28,11 @@ export default function MovieDetails({
 
     const newWatchedMovie: TWatchedMovie = {
       imdbID: selectedId,
-      title: movie?.Title,
-      year: movie?.Year,
-      poster: movie?.Poster,
+      title: movie?.title,
+      year: movie?.year,
+      poster: movie?.poster,
       imdbRating: Number(movie?.imdbRating),
-      runtime: Number(movie?.Runtime.split(" ")[0]),
+      runtime: Number(movie?.runtime.split(" ")[0]),
       userRating : userRating,
     };
     onAddWatched(newWatchedMovie);
@@ -55,15 +55,15 @@ export default function MovieDetails({
 
   useEffect(
     function () {
-      if (!movie?.Title) return;
-      document.title = `Movie | ${movie?.Title}`;
+      if (!movie?.title) return;
+      document.title = `Movie | ${movie?.title}`;
 
       return function () {
         document.title = "usePopcorn";
         // console.log(`Clean up effect for movie ${title}`);
       };
     },
-    [movie?.Title]
+    [movie?.title]
   );
   return (
     <div className="details">
@@ -75,13 +75,13 @@ export default function MovieDetails({
             <button className="btn-back" onClick={onCloseMovie}>
               &larr;
             </button>
-            <img src={movie?.Poster} alt={`Poster of ${movie} movie`} />
+            <img src={movie?.poster} alt={`Poster of ${movie} movie`} />
             <div className="details-overview">
-              <h2>{movie?.Title}</h2>
+              <h2>{movie?.title}</h2>
               <p>
-                {movie?.Released} &bull; {movie?.Runtime}
+                {movie?.released} &bull; {movie?.runtime}
               </p>
-              <p>{movie?.Genre}</p>
+              <p>{movie?.genre}</p>
               <p>
                 <span>⭐️</span>
                 {movie?.imdbRating} IMDb rating
@@ -111,10 +111,10 @@ export default function MovieDetails({
               )}
             </div>
             <p>
-              <em>{movie?.Plot}</em>
+              <em>{movie?.plot}</em>
             </p>
-            <p>Starring {movie?.Actors}</p>
-            <p>Directed by {movie?.Director}</p>
+            <p>Starring {movie?.actors}</p>
+            <p>Directed by {movie?.director}</p>
           </section>
         </>
       )}

@@ -26,6 +26,19 @@ export type TMovieDetailsAPI = {
   Response: string;
 };
 
+export type TMovieDetails = {
+  poster: string;
+  title: string;
+  year: string;
+  released: string;
+  runtime: string;
+  genre: string;
+  imdbRating: string;
+  plot: string;
+  actors: string;
+  director: string;
+};
+
 export type TMovieAPI = {
   Title: string;
   Year: string;

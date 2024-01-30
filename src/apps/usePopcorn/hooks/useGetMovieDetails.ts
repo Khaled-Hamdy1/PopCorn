@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import {  TMovieDetailsAPI } from "../types";
+import { TMovieDetails, TMovieDetailsAPI } from "../types";
 
 export default function useGetMovieDetails(selectedId: string) {
-  const [movie, setMovie] = useState<TMovieDetailsAPI | null>(null);
+  const [movie, setMovie] = useState<TMovieDetails | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -17,9 +17,32 @@ export default function useGetMovieDetails(selectedId: string) {
           setError(new Error("Failed to fetch movie details"));
           throw new Error("Failed to fetch movie details");
         }
-        const data:TMovieDetailsAPI = (await res.json())
-        
-        setMovie(data);
+        const data: TMovieDetailsAPI = await res.json();
+        const {
+          Title: title,
+          Year: year,
+          Poster: poster,
+          imdbRating,
+          Runtime: runtime,
+          Genre: genre,
+          Released: released,
+          Plot: plot,
+          Actors: actors,
+          Director: director,
+        } = data;
+        const result: TMovieDetails = {
+          title,
+          year,
+          poster,
+          imdbRating,
+          runtime,
+          genre,
+          released,
+          plot,
+          actors,
+          director,
+        };
+        setMovie(result);
       } catch (error) {
         console.error("Error fetching movie details:", error);
         setError(new Error("Failed to fetch movie details"));
@@ -36,5 +59,5 @@ export default function useGetMovieDetails(selectedId: string) {
     }
   }, [selectedId]);
 
-  return { movie, isLoading, error};
+  return { movie, isLoading, error };
 }

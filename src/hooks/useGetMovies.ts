@@ -25,15 +25,15 @@ export default function useGetMovies(query: string) {
         const data = await res.json();
         if (data.Response === "False") throw new Error("Movie not found");
 
-        const Result: TMovie[] = [];
-        data.Search.forEach((item: TMovieAPI) => {
-          Result.push({
+        const Result: TMovie[] = data.Search.map((item: TMovieAPI) => {
+          return {
             title: item.Title,
             year: item.Year,
             imdbID: item.imdbID,
             poster: item.Poster,
-          });
+          };
         });
+
         setMovies(Result);
         setError("");
       } catch (error) {
